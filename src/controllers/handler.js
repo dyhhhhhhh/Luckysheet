@@ -1245,13 +1245,52 @@ export default function luckysheetHandler() {
                     return;
                 }
 
-                let x = event.pageX;
-                let y = event.pageY;
+                // let x = event.pageX;
+                // let y = event.pageY;
                 let data = Store.flowdata;
 
                 let obj_s = Store.luckysheet_select_save[0];
 
                 const cellRightClickConfig = luckysheetConfigsetting.cellRightClickConfig;
+                let mouse = mouseposition(event.pageX, event.pageY);
+                if (
+                  mouse[0] >= Store.cellmainWidth - Store.cellMainSrollBarSize ||
+                  mouse[1] >= Store.cellmainHeight - Store.cellMainSrollBarSize
+                ) {
+                    return;
+                }
+
+                let scrollLeft = $("#luckysheet-cell-main").scrollLeft(),
+                  scrollTop = $("#luckysheet-cell-main").scrollTop();
+                let x = mouse[0] + scrollLeft;
+                let y = mouse[1] + scrollTop;
+
+                if (
+                  luckysheetFreezen.freezenverticaldata != null &&
+                  mouse[0] < luckysheetFreezen.freezenverticaldata[0] - luckysheetFreezen.freezenverticaldata[2]
+                ) {
+                    x = mouse[0] + luckysheetFreezen.freezenverticaldata[2];
+                }
+
+                if (
+                  luckysheetFreezen.freezenhorizontaldata != null &&
+                  mouse[1] < luckysheetFreezen.freezenhorizontaldata[0] - luckysheetFreezen.freezenhorizontaldata[2]
+                ) {
+                    y = mouse[1] + luckysheetFreezen.freezenhorizontaldata[2];
+                }
+
+                let row_location = rowLocation(y),
+                  row_index = row_location[2];
+
+                let col_location = colLocation(x),
+                  col_index = col_location[2];
+
+                let margeset = menuButton.mergeborer(Store.flowdata, row_index, col_index);
+                if (!!margeset) {
+                    row_index = margeset.row[2];
+                    col_index = margeset.column[2];
+                }
+
 
                 $("#luckysheet-cols-rows-data").show();
                 $("#luckysheet-cols-rows-handleincell").show();
