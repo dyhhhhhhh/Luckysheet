@@ -1291,6 +1291,7 @@ export default function luckysheetHandler() {
                     col_index = margeset.column[2];
                 }
 
+                console.log(row_index, col_index, Store.flowdata[row_index][col_index]);
 
                 $("#luckysheet-cols-rows-data").show();
                 $("#luckysheet-cols-rows-handleincell").show();
@@ -1591,7 +1592,7 @@ export default function luckysheetHandler() {
                     $$("#luckysheet-cols-rows-data .luckysheet-menuseparator").style.display = "none";
                 }
 
-                showrightclickmenu($("#luckysheet-rightclick-menu"), x, y);
+                showrightclickmenu($("#luckysheet-rightclick-menu"), event.pageX, event.pageY);
             }
 
             // 备注：在mousedown中发送光标信息会漏处理部分(选区)范围
