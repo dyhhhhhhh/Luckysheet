@@ -4,7 +4,7 @@ import Store from '../store';
 import flatpickr from 'flatpickr'
 import dayjs from "dayjs";
 import { update, datenum_local } from '../global/format';
-import { setCellValue, setCellFormat } from '../global/api';
+import {setCellValue, setCellFormat, exitEditMode} from '../global/api';
 
 const fitFormat = (formatStr) => {
     let dateFormat = formatStr.replace(/y/g, 'Y');
@@ -87,6 +87,7 @@ const cellDatePickerCtrl = {
             onClose() {
                 setTimeout(() => {
                     fp.destroy()
+                    exitEditMode()
                 }, 0);
             },
             parseDate: (datestr, format) => {
@@ -98,7 +99,7 @@ const cellDatePickerCtrl = {
                 }
                 return dayjs(date).format(format);
             },
-            onChange: function (selectedDates, dateStr) {
+            onValueUpdate: function (selectedDates, dateStr) {
                 let currentVal = datenum_local(new Date(selectedDates))
                 $("#luckysheet-rich-text-editor").html(dateStr);
                 setCellValue(r, c, currentVal, { isRefresh: false })
