@@ -83,6 +83,7 @@ const cellDatePickerCtrl = {
             dateFormat,
             time_24hr,
             defaultDate,
+            minuteIncrement: 1,
             onClose() {
                 setTimeout(() => {
                     fp.destroy()
