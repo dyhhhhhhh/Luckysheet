@@ -1293,12 +1293,20 @@ export default function luckysheetHandler() {
 
                 console.log(row_index, col_index, Store.flowdata[row_index][col_index]);
 
+                const cellStatus = Store.flowdata[row_index][col_index].status;
+
                 $("#luckysheet-cols-rows-data").show();
                 $("#luckysheet-cols-rows-handleincell").show();
                 $("#luckysheet-cols-rows-add, #luckysheet-cols-rows-shift").hide();
 
                 $$("#luckysheet-cols-rows-data .luckysheet-menuseparator").style.display = "block";
                 $$("#luckysheet-cols-rows-handleincell .luckysheet-menuseparator").style.display = "block";
+
+                if (cellStatus == 'updated') {
+                    $("#luckysheet-custom-rollback-cell").show();
+                } else {
+                    $("#luckysheet-custom-rollback-cell").hide();
+                }
 
                 if (obj_s["row"] != null && obj_s["row"][0] == 0 && obj_s["row"][1] == Store.flowdata.length - 1) {
                     // 如果全部按钮都隐藏，则整个菜单容器也要隐藏
@@ -3877,6 +3885,7 @@ export default function luckysheetHandler() {
                 chartResize: !!Store.chartparam.luckysheetCurrentChartResize,
                 rangeResize: !!formula.rangeResize,
                 rangeMove: !!formula.rangeMove,
+                rightClick: event.which === 3
             };
 
             let luckysheetTableContent = $("#luckysheetTableContent")

@@ -1479,7 +1479,7 @@ const sheetmanage = {
         }
 
         let ret = pivotTable.dataHandler(column, row, values, showType, newdata);
-        
+
         pivotTableConfig.pivotDatas = ret
 
 
@@ -1487,10 +1487,10 @@ const sheetmanage = {
         let data = d;
 
         let addr = 0, addc = 0;
-        let rlen = ret.length, 
+        let rlen = ret.length,
                 clen = ret[0].length;
 
-            addr = rlen - d.length; 
+            addr = rlen - d.length;
             addc = clen - d[0].length;
 
             data = datagridgrowth(d, addr + 20, addc + 10, true);
