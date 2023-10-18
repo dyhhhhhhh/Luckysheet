@@ -5978,6 +5978,7 @@ export default function luckysheetHandler() {
 
     //粘贴事件处理
     $(document).on("paste.luckysheetEvent", function(e) {
+        console.log('copy');
         if (isEditMode()) {
             //此模式下禁用粘贴
             return;
@@ -6097,7 +6098,8 @@ export default function luckysheetHandler() {
             }
 
             if (
-                txtdata.indexOf("luckysheet_copy_action_table") > -1 &&
+              // 先这样解决 luckysheet_copy_action_table
+                txtdata.indexOf("luckysheet_copy_action_table_clouddm") > -1 &&
                 Store.luckysheet_copy_save["copyRange"] != null &&
                 Store.luckysheet_copy_save["copyRange"].length > 0 &&
                 isEqual
@@ -6110,10 +6112,10 @@ export default function luckysheetHandler() {
                 } else {
                     selection.pasteHandlerOfCopyPaste(Store.luckysheet_copy_save);
                 }
-            } else if (txtdata.indexOf("luckysheet_copy_action_image") > -1) {
+            } else if (txtdata.indexOf("luckysheet_copy_action_image_clouddm") > -1) {
                 imageCtrl.pasteImgItem();
             } else {
-                if (txtdata.indexOf("table") > -1) {
+                if (txtdata.indexOf("table_clouddm") > -1) {
                     $("#luckysheet-copy-content").html(txtdata);
 
                     let data = new Array($("#luckysheet-copy-content").find("table tr").length);
@@ -6160,7 +6162,7 @@ export default function luckysheetHandler() {
                                 if (bg == "rgba(0, 0, 0, 0)") {
                                     bg = null;
                                 }
-
+                                console.log(cell);
                                 cell.bg = bg;
 
                                 let bl = $td.css("font-weight");
