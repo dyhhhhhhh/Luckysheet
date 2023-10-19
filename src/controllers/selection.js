@@ -689,8 +689,14 @@ const selection = {
 
             let minh = Store.luckysheet_select_save[0].row[0], //应用范围首尾行
                 maxh = minh + copyh - 1;
+            if (maxh >= Store.flowdata.length - 1) {
+                maxh = Store.flowdata.length - 1;
+            }
             let minc = Store.luckysheet_select_save[0].column[0], //应用范围首尾列
                 maxc = minc + copyc - 1;
+            if (maxc >= Store.flowdata[0].length - 1) {
+                maxc = Store.flowdata[0].length - 1;
+            }
 
             //应用范围包含部分合并单元格，则return提示
             let has_PartMC = false;
@@ -718,6 +724,7 @@ const selection = {
             //若应用范围超过最大行或最大列，增加行列
             let addr = maxh - rowMaxLength + 1,
                 addc = maxc - cellMaxLength + 1;
+            console.log(addr, addc);
             if (addr > 0 || addc > 0) {
                 d = datagridgrowth([].concat(d), addr, addc, true);
             }
@@ -955,6 +962,8 @@ const selection = {
             maxh = minh + copyh - 1; //应用范围首尾行
         let minc = last["column_focus"],
             maxc = minc + copyc - 1; //应用范围首尾列
+
+        console.log(maxh, maxc);
 
         //应用范围包含部分合并单元格，则提示
         let has_PartMC = false;
@@ -1476,6 +1485,15 @@ const selection = {
         let minc = last["column"][0],
             maxc = last["column"][1]; //应用范围首尾列
 
+        if (maxh >= Store.flowdata.length - 1) {
+            maxh = Store.flowdata.length - 1;
+        }
+        if (maxc >= Store.flowdata[0].length - 1) {
+            maxc = Store.flowdata[0].length - 1;
+        }
+
+
+
         let mh = (maxh - minh + 1) % copyh;
         let mc = (maxc - minc + 1) % copyc;
 
@@ -1513,9 +1531,10 @@ const selection = {
         //若应用范围超过最大行或最大列，增加行列
         let addr = copyh + minh - rowMaxLength,
             addc = copyc + minc - cellMaxLength;
-        if (addr > 0 || addc > 0) {
-            d = datagridgrowth([].concat(d), addr, addc, true);
-        }
+        console.log(addr, addc);
+        // if (addr > 0 || addc > 0) {
+        //     d = datagridgrowth([].concat(d), addr, addc, true);
+        // }
 
         let borderInfoCompute = getBorderInfoCompute(copySheetIndex);
         let c_dataVerification = $.extend(
@@ -1584,17 +1603,17 @@ const selection = {
                         }
 
                         //数据验证 复制
-                        if (c_dataVerification[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
-                            if (dataVerification == null) {
-                                dataVerification = $.extend(
-                                    true,
-                                    {},
-                                    Store.luckysheetfile[getSheetIndex(Store.currentSheetIndex)].dataVerification,
-                                );
-                            }
-
-                            dataVerification[h + "_" + c] = c_dataVerification[c_r1 + h - mth + "_" + (c_c1 + c - mtc)];
-                        }
+                        // if (c_dataVerification[c_r1 + h - mth + "_" + (c_c1 + c - mtc)]) {
+                        //     if (dataVerification == null) {
+                        //         dataVerification = $.extend(
+                        //             true,
+                        //             {},
+                        //             Store.luckysheetfile[getSheetIndex(Store.currentSheetIndex)].dataVerification,
+                        //         );
+                        //     }
+                        //
+                        //     dataVerification[h + "_" + c] = c_dataVerification[c_r1 + h - mth + "_" + (c_c1 + c - mtc)];
+                        // }
 
                         if (getObjType(x[c]) == "object" && "mc" in x[c]) {
                             if ("rs" in x[c].mc) {

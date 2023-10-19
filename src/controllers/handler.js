@@ -1293,7 +1293,7 @@ export default function luckysheetHandler() {
 
                 console.log(row_index, col_index, Store.flowdata[row_index][col_index]);
 
-                const cellStatus = Store.flowdata[row_index][col_index].status;
+                const update = Store.flowdata[row_index][col_index].update;
 
                 $("#luckysheet-cols-rows-data").show();
                 $("#luckysheet-cols-rows-handleincell").show();
@@ -1302,7 +1302,7 @@ export default function luckysheetHandler() {
                 $$("#luckysheet-cols-rows-data .luckysheet-menuseparator").style.display = "block";
                 $$("#luckysheet-cols-rows-handleincell .luckysheet-menuseparator").style.display = "block";
 
-                if (cellStatus == 'updated') {
+                if (update) {
                     $("#luckysheet-custom-rollback-cell").show();
                 } else {
                     $("#luckysheet-custom-rollback-cell").hide();
@@ -6099,7 +6099,7 @@ export default function luckysheetHandler() {
 
             if (
               // 先这样解决 luckysheet_copy_action_table
-                txtdata.indexOf("luckysheet_copy_action_table_clouddm") > -1 &&
+                txtdata.indexOf("luckysheet_copy_action_table") > -1 &&
                 Store.luckysheet_copy_save["copyRange"] != null &&
                 Store.luckysheet_copy_save["copyRange"].length > 0 &&
                 isEqual
@@ -6107,15 +6107,15 @@ export default function luckysheetHandler() {
                 //剪切板内容 和 luckysheet本身复制的内容 一致
                 if (Store.luckysheet_paste_iscut) {
                     Store.luckysheet_paste_iscut = false;
-                    selection.pasteHandlerOfCutPaste(Store.luckysheet_copy_save);
+                    // selection.pasteHandlerOfCutPaste(Store.luckysheet_copy_save);
                     selection.clearcopy(e);
                 } else {
                     selection.pasteHandlerOfCopyPaste(Store.luckysheet_copy_save);
                 }
-            } else if (txtdata.indexOf("luckysheet_copy_action_image_clouddm") > -1) {
-                imageCtrl.pasteImgItem();
+            } else if (txtdata.indexOf("luckysheet_copy_action_image") > -1) {
+                // imageCtrl.pasteImgItem();
             } else {
-                if (txtdata.indexOf("table_clouddm") > -1) {
+                if (txtdata.indexOf("table") > -1) {
                     $("#luckysheet-copy-content").html(txtdata);
 
                     let data = new Array($("#luckysheet-copy-content").find("table tr").length);
@@ -6372,7 +6372,7 @@ export default function luckysheetHandler() {
 
                 //复制的是图片
                 else if (clipboardData.files.length == 1 && clipboardData.files[0].type.indexOf("image") > -1) {
-                    imageCtrl.insertImg(clipboardData.files[0]);
+                    // imageCtrl.insertImg(clipboardData.files[0]);
 
                     return;
                 } else {
