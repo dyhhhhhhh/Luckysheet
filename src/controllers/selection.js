@@ -648,6 +648,7 @@ const selection = {
         }, 10);
     },
     pasteHandler: function(data, borderInfo) {
+        console.log(data);
         if (!checkProtectionLockedRangeList(Store.luckysheet_select_save, Store.currentSheetIndex)) {
             return;
         }
@@ -684,19 +685,29 @@ const selection = {
                 cfg["borderInfo"] = [];
             }
 
+            const preMaxC = Store.flowdata[0].length;
+            const preMaxR = Store.flowdata.length;
+            const data2 = [];
+
+            const rlen = data.length > preMaxR - Store.luckysheet_select_save[0].row[0] ? preMaxR - Store.luckysheet_select_save[0].row[0] : data.length
+            const clen = data[0].length > preMaxC - Store.luckysheet_select_save[0].column[0] ? preMaxC - Store.luckysheet_select_save[0].column[0] : data[0].length
+            for (let i = 0; i < rlen; i++) {
+                const row = [];
+                for (let j = 0; j < clen; j++) {
+                    row.push(data[i][j])
+                }
+                data2.push(row);
+            }
+
+            data = data2;
+
             let copyh = data.length,
-                copyc = data[0].length;
+              copyc = data[0].length;
 
             let minh = Store.luckysheet_select_save[0].row[0], //应用范围首尾行
                 maxh = minh + copyh - 1;
-            if (maxh >= Store.flowdata.length - 1) {
-                maxh = Store.flowdata.length - 1;
-            }
             let minc = Store.luckysheet_select_save[0].column[0], //应用范围首尾列
                 maxc = minc + copyc - 1;
-            if (maxc >= Store.flowdata[0].length - 1) {
-                maxc = Store.flowdata[0].length - 1;
-            }
 
             //应用范围包含部分合并单元格，则return提示
             let has_PartMC = false;
@@ -724,10 +735,9 @@ const selection = {
             //若应用范围超过最大行或最大列，增加行列
             let addr = maxh - rowMaxLength + 1,
                 addc = maxc - cellMaxLength + 1;
-            console.log(addr, addc);
-            if (addr > 0 || addc > 0) {
-                d = datagridgrowth([].concat(d), addr, addc, true);
-            }
+            // if (addr > 0 || addc > 0) {
+            //     d = datagridgrowth([].concat(d), addr, addc, true);
+            // }
 
             if (cfg["rowlen"] == null) {
                 cfg["rowlen"] = {};
@@ -1462,8 +1472,6 @@ const selection = {
         }
 
         let copyData = $.extend(true, [], arr);
-        const preMaxC = Store.flowdata[0].length;
-        const preMaxR = Store.flowdata.length;
 
         //多重选择选择区域 单元格如果有函数 则只取值 不取函数
         if (copyRange["copyRange"].length > 1) {
@@ -1485,14 +1493,14 @@ const selection = {
         let minc = last["column"][0],
             maxc = last["column"][1]; //应用范围首尾列
 
+        const preMaxC = Store.flowdata[0].length;
+        const preMaxR = Store.flowdata.length;
         const copyData2 = [];
         const rlen = copyData.length > preMaxR - minh ? preMaxR - minh : copyData.length
         const clen = copyData[0].length > preMaxC - minc ? preMaxC - minc : copyData[0].length
-        console.log(rlen, clen);
         for (let i = 0; i < rlen; i++) {
             const row = [];
             for (let j = 0; j < clen; j++) {
-                console.log('push', copyData[i][j])
                 row.push(copyData[i][j])
             }
             copyData2.push(row);
