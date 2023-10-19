@@ -1462,6 +1462,8 @@ const selection = {
         }
 
         let copyData = $.extend(true, [], arr);
+        const preMaxC = Store.flowdata[0].length;
+        const preMaxR = Store.flowdata.length;
 
         //多重选择选择区域 单元格如果有函数 则只取值 不取函数
         if (copyRange["copyRange"].length > 1) {
@@ -1475,8 +1477,6 @@ const selection = {
             }
         }
 
-        let copyh = copyData.length,
-            copyc = copyData[0].length;
 
         //应用范围
         let last = Store.luckysheet_select_save[Store.luckysheet_select_save.length - 1];
@@ -1485,13 +1485,24 @@ const selection = {
         let minc = last["column"][0],
             maxc = last["column"][1]; //应用范围首尾列
 
-        if (maxh >= Store.flowdata.length - 1) {
-            maxh = Store.flowdata.length - 1;
-        }
-        if (maxc >= Store.flowdata[0].length - 1) {
-            maxc = Store.flowdata[0].length - 1;
+        const copyData2 = [];
+        const rlen = copyData.length > preMaxR - minh ? preMaxR - minh : copyData.length
+        const clen = copyData[0].length > preMaxC - minc ? preMaxC - minc : copyData[0].length
+        console.log(rlen, clen);
+        for (let i = 0; i < rlen; i++) {
+            const row = [];
+            for (let j = 0; j < clen; j++) {
+                console.log('push', copyData[i][j])
+                row.push(copyData[i][j])
+            }
+            copyData2.push(row);
         }
 
+        copyData = copyData2;
+
+        let copyh = copyData.length,
+          copyc = copyData[0].length;
+        console.log(copyData, copyData2, minc, maxc);
 
 
         let mh = (maxh - minh + 1) % copyh;

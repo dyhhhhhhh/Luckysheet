@@ -228,7 +228,6 @@ export function datagridgrowth(data, addr, addc, iscallback) {
         server.saveParam("all", Store.currentSheetIndex, data[0].length, { "k": "column" });
     }
 
-    console.log(data);
     return data;
 }
 
