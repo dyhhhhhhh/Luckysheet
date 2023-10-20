@@ -648,7 +648,6 @@ const selection = {
         }, 10);
     },
     pasteHandler: function(data, borderInfo) {
-        console.log(data);
         if (!checkProtectionLockedRangeList(Store.luckysheet_select_save, Store.currentSheetIndex)) {
             return;
         }
@@ -694,11 +693,17 @@ const selection = {
             for (let i = 0; i < rlen; i++) {
                 const row = [];
                 for (let j = 0; j < clen; j++) {
-                    row.push(data[i][j])
+                    const curr = Store.luckysheet_select_save[0].row[0] + i;
+                    const curc = Store.luckysheet_select_save[0].column[0] + j;
+                    const preCell = { ...Store.flowdata[curr][curc] };
+                    preCell.v = data[i][j].v;
+                    preCell.m = data[i][j].v;
+                    preCell.custom.isNull = data[i][j] === '';
+                    row.push(preCell)
                 }
                 data2.push(row);
             }
-
+            console.log(data, data2);
             data = data2;
 
             let copyh = data.length,
@@ -1501,7 +1506,13 @@ const selection = {
         for (let i = 0; i < rlen; i++) {
             const row = [];
             for (let j = 0; j < clen; j++) {
-                row.push(copyData[i][j])
+                const curr = minh + i;
+                const curc = minc + j;
+                const preCell = { ...Store.flowdata[curr][curc] };
+                preCell.v = copyData[i][j].v;
+                preCell.m = copyData[i][j].v;
+                preCell.custom.isNull = copyData[i][j].custom.isNull;
+                row.push(preCell)
             }
             copyData2.push(row);
         }
