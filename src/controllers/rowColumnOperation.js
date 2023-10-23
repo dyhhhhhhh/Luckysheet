@@ -1147,18 +1147,18 @@ export function rowColumnOperationInitial() {
             row_pre = row_location[0],
             row_index = row_location[2];
 
-        Store.luckysheet_rows_change_size = true;
+        Store.luckysheet_rows_change_size = false;
         Store.luckysheet_scroll_status = true;
-        $("#luckysheet-change-size-line").css({
-            height: "1px",
-            "border-width": "0 0px 1px 0",
-            top: row - 3,
-            left: 0,
-            width: scrollLeft + winW,
-            display: "block",
-            cursor: "ns-resize",
-        });
-        $("#luckysheet-sheettable, #luckysheet-rows-h, #luckysheet-rows-h canvas").css("cursor", "ns-resize");
+        // $("#luckysheet-change-size-line").css({
+        //     height: "1px",
+        //     "border-width": "0 0px 1px 0",
+        //     top: row - 3,
+        //     left: 0,
+        //     width: scrollLeft + winW,
+        //     display: "block",
+        //     cursor: "ns-resize",
+        // });
+        // $("#luckysheet-sheettable, #luckysheet-rows-h, #luckysheet-rows-h canvas").css("cursor", "ns-resize");
         Store.luckysheet_rows_change_size_start = [row_pre, row_index];
         $("#luckysheet-rightclick-menu").hide();
         $("#luckysheet-rows-h-hover").hide();
@@ -1357,8 +1357,8 @@ export function rowColumnOperationInitial() {
 
         let st_index = Store.luckysheet_select_save[0][Store.luckysheetRightHeadClickIs][0];
 
-		if(!method.createHookFunction("rowInsertBefore",  st_index, value, "lefttop", Store.luckysheetRightHeadClickIs)){ 
-			return; 
+		if(!method.createHookFunction("rowInsertBefore",  st_index, value, "lefttop", Store.luckysheetRightHeadClickIs)){
+			return;
 		}
 		luckysheetextendtable(Store.luckysheetRightHeadClickIs, st_index, value, "lefttop");
 
@@ -1375,8 +1375,8 @@ export function rowColumnOperationInitial() {
 
         let st_index = Store.luckysheet_select_save[0].row[0];
 
-		if(!method.createHookFunction("rowInsertBefore",  st_index, 1, "lefttop", Store.luckysheetRightHeadClickIs)){ 
-			return; 
+		if(!method.createHookFunction("rowInsertBefore",  st_index, 1, "lefttop", Store.luckysheetRightHeadClickIs)){
+			return;
 		}
         luckysheetextendtable('row', st_index, 1, "lefttop");
 
@@ -1584,7 +1584,7 @@ export function rowColumnOperationInitial() {
         let st_index = Store.luckysheet_select_save[0][Store.luckysheetRightHeadClickIs][1];
 
 		if(!method.createHookFunction("rowInsertBefore",  st_index, value, "rightbottom", Store.luckysheetRightHeadClickIs)){
-			return; 
+			return;
 		}
 
         luckysheetextendtable(Store.luckysheetRightHeadClickIs, st_index, value, "rightbottom");
@@ -1732,7 +1732,7 @@ export function rowColumnOperationInitial() {
             ed_index = Store.luckysheet_select_save[0][Store.luckysheetRightHeadClickIs][1];
 
         if(!method.createHookFunction("rowDeleteBefore", st_index, ed_index, Store.luckysheetRightHeadClickIs)){
-        	return; 
+        	return;
 
         }
         luckysheetdeletetable(Store.luckysheetRightHeadClickIs, st_index, ed_index);
@@ -1764,7 +1764,7 @@ export function rowColumnOperationInitial() {
             ed_index = Store.luckysheet_select_save[0].row[1];
 
 		if(!method.createHookFunction("rowDeleteBefore", st_index, ed_index, 'row')){
-			return; 
+			return;
 		}
         luckysheetdeletetable('row', st_index, ed_index);
     })

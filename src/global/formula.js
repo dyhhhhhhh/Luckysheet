@@ -1305,6 +1305,7 @@ const luckysheetformula = {
             });
     },
     updatecell: function(r, c, value, isRefresh = true) {
+        console.log(r, c, value);
         let _this = this;
 
         let $input = $("#luckysheet-rich-text-editor");
@@ -6162,7 +6163,7 @@ const luckysheetformula = {
             }
         }
 
-        
+
     },
     addButtonListener:function(txt, r, c){
         let listener =  $("#luckysheet-formula-refresh").data("listener")
@@ -6176,7 +6177,7 @@ const luckysheetformula = {
                 e.stopPropagation();
             })
         }
-        
+
     },
     showButton: function(r, c) {
 
@@ -6191,7 +6192,7 @@ const luckysheetformula = {
         if(!!margeset){
             row = margeset.row[1];
             row_pre = margeset.row[0];
-            
+
             col = margeset.column[1];
             col_pre = margeset.column[0];
         }
