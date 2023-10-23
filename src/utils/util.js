@@ -421,7 +421,7 @@ function luckysheetfontformat(format) {
         if (!format.ff) {
             font +=
                 fontarray[0] +
-                ', "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif';
+                ', "PingFang SC", "Helvetica Neue", Helvetica, Arial, "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif';
         } else {
             let fontfamily = null;
             let fontjson = locale().fontjson;

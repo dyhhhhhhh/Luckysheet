@@ -698,6 +698,9 @@ const selection = {
                     const preCell = { ...Store.flowdata[curr][curc] };
                     preCell.v = data[i][j].v;
                     preCell.m = data[i][j].v;
+                    if (!preCell.custom) {
+                        preCell.custom = {};
+                    }
                     preCell.custom.isNull = data[i][j] === '';
                     row.push(preCell)
                 }
@@ -1511,6 +1514,9 @@ const selection = {
                 const preCell = { ...Store.flowdata[curr][curc] };
                 preCell.v = copyData[i][j].v;
                 preCell.m = copyData[i][j].v;
+                if (!preCell.custom) {
+                    preCell.custom = {};
+                }
                 preCell.custom.isNull = copyData[i][j].custom.isNull;
                 row.push(preCell)
             }

@@ -3841,8 +3841,10 @@ export default function luckysheetHandler() {
     $(document).on("mouseup.luckysheetEvent", function(event) {
         if (luckysheetConfigsetting && luckysheetConfigsetting.hook && luckysheetConfigsetting.hook.sheetMouseup) {
             let mouse = mouseposition(event.pageX, event.pageY);
-            let x = mouse[0] + $("#luckysheet-cell-main").scrollLeft();
-            let y = mouse[1] + $("#luckysheet-cell-main").scrollTop();
+            const scrollLeft = $("#luckysheet-cell-main").scrollLeft();
+            const scrollTop = $("#luckysheet-cell-main").scrollTop();
+            let x = mouse[0] + scrollLeft;
+            let y = mouse[1] + scrollTop;
 
             let row_location = rowLocation(y),
                 row = row_location[1],
@@ -3885,7 +3887,9 @@ export default function luckysheetHandler() {
                 chartResize: !!Store.chartparam.luckysheetCurrentChartResize,
                 rangeResize: !!formula.rangeResize,
                 rangeMove: !!formula.rangeMove,
-                rightClick: event.which === 3
+                rightClick: event.which === 3,
+                mouse: [x, y],
+                scroll: [scrollLeft, scrollTop]
             };
 
             let luckysheetTableContent = $("#luckysheetTableContent")
