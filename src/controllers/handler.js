@@ -6157,7 +6157,7 @@ export default function luckysheetHandler() {
                                     cell.m = "";
                                 } else {
                                     let mask = genarate($td.text());
-                                    cell.v = mask[2];
+                                    cell.v = mask[0];
                                     cell.ct = mask[1];
                                     cell.m = mask[0];
                                 }

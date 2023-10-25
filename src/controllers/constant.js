@@ -375,12 +375,12 @@ function rightclickHTML() {
 
     const customsButtons = (config.customs || [])
         .map(
-            (item, index) => `
+            (item, index) => item.title !== 'divider' ? `
             <div id="${item.id}" data-index="${index}" class="luckysheetColsRowsHandleAdd_custom luckysheet-cols-menuitem luckysheet-mousedown-cancel">
                 <div class="luckysheet-cols-menuitem-content luckysheet-mousedown-cancel">
                 ${item.title}
                 </div>
-            </div>`,
+            </div>` : `<div class="luckysheet-custom-divider" style="border-bottom: 1px solid #ccc;"></div>`,
         )
         .join("");
 
