@@ -11,15 +11,15 @@ import { createFilter, createFilterOptions, labelFilterOptionState } from './fil
 import formula from '../global/formula';
 import json from '../global/json';
 import cleargridelement from '../global/cleargridelement';
-import { 
-    jfrefreshgrid, 
-    jfrefreshgridall, 
-    jfrefreshrange, 
-    jfrefreshgrid_rhcw, 
+import {
+    jfrefreshgrid,
+    jfrefreshgridall,
+    jfrefreshrange,
+    jfrefreshgrid_rhcw,
     jfrefreshgrid_adRC,
     jfrefreshgrid_deleteCell,
     jfrefreshgrid_pastcut,
-    luckysheetrefreshgrid 
+    luckysheetrefreshgrid
 } from '../global/refresh';
 import { getSheetIndex } from '../methods/get';
 import Store from '../store';
@@ -33,7 +33,7 @@ function formulaHistoryHanddler(ctr, type="redo"){
 
     let data = ctr.data;
     if(type=="undo"){
-        data = ctr.curdata;
+        data = ctr.curData;
     }
     for(let s = 0; s < ctr.range.length; s++){
         let st_r = ctr.range[s].row[0];
@@ -67,7 +67,7 @@ const controlHistory = {
         let ctr = Store.jfredo.pop();
         Store.jfundo.push(ctr);
         Store.clearjfundo = false;
-        
+
         if (sheetmanage.hasSheet(ctr.sheetIndex) && Store.currentSheetIndex != ctr.sheetIndex) {
             sheetmanage.changeSheetExec(ctr.sheetIndex);
         }
@@ -77,7 +77,7 @@ const controlHistory = {
         if (ctr.type == "datachange") {
             //如果有单元格为null,则对应公式应该删除
             formulaHistoryHanddler(ctr);
-            
+
             let allParam = {
                 "cfg": ctr.config,
                 "RowlChange": ctr.RowlChange,
@@ -125,7 +125,7 @@ const controlHistory = {
         else if (ctr.type == "rangechange") {
             //如果有单元格为null,则对应公式应该删除
             formulaHistoryHanddler(ctr);
-            
+
             jfrefreshrange(ctr.data, ctr.range, ctr.cdformat);
             // formula.execFunctionGroup(null, null, null, null, ctr.data);//取之前的数据
         }
@@ -166,14 +166,14 @@ const controlHistory = {
             }
 
             jfrefreshgrid_adRC(
-                ctr.data, 
-                ctr.config, 
-                "delRC", 
-                ctrlValue, 
-                ctr.calc, 
-                ctr.filterObj, 
-                ctr.cf, 
-                ctr.af, 
+                ctr.data,
+                ctr.config,
+                "delRC",
+                ctrlValue,
+                ctr.calc,
+                ctr.filterObj,
+                ctr.cf,
+                ctr.af,
                 ctr.freezen,
                 ctr.dataVerification,
                 ctr.hyperlink
@@ -185,14 +185,14 @@ const controlHistory = {
             ctrlValue.direction = "lefttop";
 
             jfrefreshgrid_adRC(
-                ctr.data, 
-                ctr.config, 
-                "addRC", 
-                ctrlValue, 
-                ctr.calc, 
-                ctr.filterObj, 
-                ctr.cf, 
-                ctr.af, 
+                ctr.data,
+                ctr.config,
+                "addRC",
+                ctrlValue,
+                ctr.calc,
+                ctr.filterObj,
+                ctr.cf,
+                ctr.af,
                 ctr.freezen,
                 ctr.dataVerification,
                 ctr.hyperlink
@@ -200,11 +200,11 @@ const controlHistory = {
         }
         else if (ctr.type == "deleteCell") { //删除单元格撤销操作
             jfrefreshgrid_deleteCell(
-                ctr.data, 
-                ctr.config, 
-                ctr.ctrl, 
-                ctr.calc, 
-                ctr.filterObj, 
+                ctr.data,
+                ctr.config,
+                ctr.ctrl,
+                ctr.calc,
+                ctr.filterObj,
                 ctr.cf,
                 ctr.dataVerification,
                 ctr.hyperlink
@@ -214,20 +214,20 @@ const controlHistory = {
             //config
             Store.config = ctr.config;
             Store.luckysheetfile[getSheetIndex(ctr.sheetIndex)].config = ctr.config;
-        
+
             server.saveParam("cg", ctr.sheetIndex, ctr.config["rowhidden"], { "k": "rowhidden" });
-        
-            //行高、列宽 刷新  
+
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
         }
         else if (ctr.type == "showHidCols") { // 隐藏、显示列 撤销操作
             //config
             Store.config = ctr.config;
             Store.luckysheetfile[getSheetIndex(ctr.sheetIndex)].config = ctr.config;
-        
+
             server.saveParam("cg", ctr.sheetIndex, ctr.config["colhidden"], { "k": "colhidden" });
-        
-            //行高、列宽 刷新  
+
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
         }
         else if (ctr.type == "datachangeAll") {
@@ -255,17 +255,17 @@ const controlHistory = {
 
             server.saveParam("cg", Store.currentSheetIndex, Store.config["rowhidden"], { "k": "rowhidden" });
 
-            //行高、列宽 刷新  
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
 
             $("#luckysheet-filter-menu, #luckysheet-filter-submenu").hide();
         }
         else if (ctr.type == "datachangeAll_filter") {
             let $top = $("#luckysheet-filter-options-sheet" + Store.currentSheetIndex + " .luckysheet-filter-options").eq(ctr["optionsindex"]);
-            let st_r = $top.data("str"), 
-                ed_r = $top.data("edr"), 
-                cindex = $top.data("cindex"), 
-                st_c = $top.data("stc"), 
+            let st_r = $top.data("str"),
+                ed_r = $top.data("edr"),
+                cindex = $top.data("cindex"),
+                st_c = $top.data("stc"),
                 ed_c = $top.data("edc");
 
             labelFilterOptionState($top, json.hasKey(ctr.rowhidenPre), ctr.rowhidenPre, ctr.caljs, true, st_r, ed_r, cindex, st_c, ed_c);
@@ -280,14 +280,14 @@ const controlHistory = {
 
             server.saveParam("cg", Store.currentSheetIndex, Store.config["rowhidden"], { "k": "rowhidden" });
 
-            //行高、列宽 刷新  
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
-            
+
             $("#luckysheet-filter-menu, #luckysheet-filter-submenu").hide();
         }
         else if (ctr.type == "filtershow") {
             $('#luckysheet-filter-selected-sheet' + ctr.sheetIndex + ', #luckysheet-filter-options-sheet' + ctr.sheetIndex).remove();
-            
+
             if(server.allowUpdate){
                 server.saveParam("all", ctr.sheetIndex, null, { "k": "filter_select" });
             }
@@ -333,7 +333,7 @@ const controlHistory = {
         }
         else if (ctr.type == "sheetColor") {
             Store.luckysheetfile[getSheetIndex(ctr.sheetIndex)].color = ctr.oldcolor;
-            
+
             let luckysheetcurrentSheetitem = $("#luckysheet-sheets-item" + ctr.sheetIndex);
             luckysheetcurrentSheetitem.find(".luckysheet-sheets-item-color").remove();
 
@@ -368,7 +368,7 @@ const controlHistory = {
                 //条件规则
                 let sheetIndex = historyRules[i]["sheetIndex"];
                 Store.luckysheetfile[getSheetIndex(sheetIndex)]["luckysheet_conditionformat_save"] = historyRules[i]["luckysheet_conditionformat_save"];
-            
+
                 if(server.allowUpdate){
                     server.saveParam("all", sheetIndex, historyRules[i]["luckysheet_conditionformat_save"], { "k": "luckysheet_conditionformat_save" });
                 }
@@ -429,7 +429,7 @@ const controlHistory = {
             zoomNumberDomBind();
             zoomRefreshView();
         }
-        
+
         cleargridelement(e);
         if (ctr.range) {
             //使用深复制
@@ -438,11 +438,11 @@ const controlHistory = {
         }
         Store.clearjfundo = true;
 
-        // 撤销的时候curdata 跟 data 数据要调换一下
-        let newCtr = {...ctr, ...{data: ctr.curdata, curdata: ctr.data}}
+        // 撤销的时候curData 跟 data 数据要调换一下
+        let newCtr = {...ctr, ...{data: ctr.curData, curData: ctr.data}}
         // 钩子函数
         method.createHookFunction('updated', newCtr)
-        
+
     },
     undo: function () {
         if (Store.jfundo.length == 0) {
@@ -473,7 +473,7 @@ const controlHistory = {
 
             //防止协同编辑时选区错误
             server.saveParam("mv", Store.currentSheetIndex, ctr.range);
-            jfrefreshgrid(ctr.curdata, ctr.range, allParam);
+            jfrefreshgrid(ctr.curData, ctr.range, allParam);
         }
         else if (ctr.type == "pasteCut") {
             jfrefreshgrid_pastcut(ctr.source, ctr.target, ctr.RowlChange);
@@ -481,7 +481,7 @@ const controlHistory = {
         else if (ctr.type == "rangechange") {
             // formula.execFunctionGroup();
             formulaHistoryHanddler(ctr, "undo");
-            jfrefreshrange(ctr.curdata, ctr.range, ctr.curCdformat);
+            jfrefreshrange(ctr.curData, ctr.range, ctr.curCdformat);
         }
         else if (ctr.type == "resize") {
             Store.config = ctr.curconfig;
@@ -503,26 +503,26 @@ const controlHistory = {
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
         }
         else if (ctr.type == "cellRowChange") {
-            jfrefreshgridall(ctr.curdata[0].length, ctr.curdata.length, ctr.curdata, ctr.curconfig, ctr.currange, ctr.ctrlType, ctr.ctrlValue, ctr.curCdformat);
+            jfrefreshgridall(ctr.curData[0].length, ctr.curData.length, ctr.curData, ctr.curconfig, ctr.currange, ctr.ctrlType, ctr.ctrlValue, ctr.curCdformat);
         }
         else if (ctr.type == "extend") {
-            jfrefreshgridall(ctr.curdata[0].length, ctr.curdata.length, ctr.curdata, ctr.curconfig, ctr.currange, ctr.ctrlType, ctr.ctrlValue);
+            jfrefreshgridall(ctr.curData[0].length, ctr.curData.length, ctr.curData, ctr.curconfig, ctr.currange, ctr.ctrlType, ctr.ctrlValue);
         }
         else if (ctr.type == "dele") {
             let ctrlValue1 = $.extend(true, {}, ctr.ctrlValue);
             ctrlValue1.restore = true;
-            jfrefreshgridall(ctr.curdata[0].length, ctr.curdata.length, ctr.curdata, ctr.curconfig, ctr.currange, ctr.ctrlType, ctr.ctrlValue);
+            jfrefreshgridall(ctr.curData[0].length, ctr.curData.length, ctr.curData, ctr.curconfig, ctr.currange, ctr.ctrlType, ctr.ctrlValue);
         }
         else if (ctr.type == "addRC") { //增加行列重做操作
             jfrefreshgrid_adRC(
-                ctr.curData, 
-                ctr.curConfig, 
-                "addRC", 
-                ctr.ctrlValue, 
-                ctr.curCalc, 
-                ctr.curFilterObj, 
-                ctr.curCf, 
-                ctr.curAf, 
+                ctr.curData,
+                ctr.curConfig,
+                "addRC",
+                ctr.ctrlValue,
+                ctr.curCalc,
+                ctr.curFilterObj,
+                ctr.curCf,
+                ctr.curAf,
                 ctr.curFreezen,
                 ctr.curDataVerification,
                 ctr.curHyperlink
@@ -530,14 +530,14 @@ const controlHistory = {
         }
         else if (ctr.type == "delRC") { //删除行列重做操作
             jfrefreshgrid_adRC(
-                ctr.curData, 
-                ctr.curConfig, 
-                "delRC", 
-                ctr.ctrlValue, 
-                ctr.curCalc, 
-                ctr.curFilterObj, 
-                ctr.curCf, 
-                ctr.curAf, 
+                ctr.curData,
+                ctr.curConfig,
+                "delRC",
+                ctr.ctrlValue,
+                ctr.curCalc,
+                ctr.curFilterObj,
+                ctr.curCf,
+                ctr.curAf,
                 ctr.curFreezen,
                 ctr.curDataVerification,
                 ctr.curHyperlink
@@ -545,11 +545,11 @@ const controlHistory = {
         }
         else if (ctr.type == "deleteCell") { //删除单元格重做操作
             jfrefreshgrid_deleteCell(
-                ctr.curData, 
-                ctr.curConfig, 
-                ctr.ctrl, 
-                ctr.curCalc, 
-                ctr.curFilterObj, 
+                ctr.curData,
+                ctr.curConfig,
+                ctr.ctrl,
+                ctr.curCalc,
+                ctr.curFilterObj,
                 ctr.curCf,
                 ctr.curDataVerification,
                 ctr.curHyperlink
@@ -559,38 +559,38 @@ const controlHistory = {
             //config
             Store.config = ctr.curconfig;
             Store.luckysheetfile[getSheetIndex(ctr.sheetIndex)].config = ctr.curconfig;
-        
+
             server.saveParam("cg", ctr.sheetIndex, ctr.curconfig["rowhidden"], { "k": "rowhidden" });
-        
-            //行高、列宽 刷新  
+
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
         }
         else if (ctr.type == "showHidCols") { // 隐藏、显示列 重做操作
             //config
             Store.config = ctr.curconfig;
             Store.luckysheetfile[getSheetIndex(ctr.sheetIndex)].config = ctr.curconfig;
-        
+
             server.saveParam("cg", ctr.sheetIndex, ctr.curconfig["colhidden"], { "k": "colhidden" });
-        
-            //行高、列宽 刷新  
+
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
         }
         else if (ctr.type == "datachangeAll") {
             formula.execFunctionGroup();
-            jfrefreshgridall(ctr.curdata[0].length, ctr.curdata.length, ctr.curdata, null, ctr.currange, "datachangeAll", ctr.ctrlValue);
+            jfrefreshgridall(ctr.curData[0].length, ctr.curData.length, ctr.curData, null, ctr.currange, "datachangeAll", ctr.ctrlValue);
         }
         else if (ctr.type == "datachangeAll_filter_clear") {
             server.saveParam("fsc", Store.currentSheetIndex, null);
-            
+
             //config
             Store.config = ctr.curconfig;
             Store.luckysheetfile[getSheetIndex(Store.currentSheetIndex)].config = Store.config;
 
             server.saveParam("cg", Store.currentSheetIndex, {}, { "k": "rowhidden" });
 
-            //行高、列宽 刷新  
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
-            
+
 
             $("#luckysheet-filter-menu .luckysheet-filter-selected-input").hide().find("input").val();
             $("#luckysheet-filter-selected span").data("type", "0").data("type", null).text("无");
@@ -600,10 +600,10 @@ const controlHistory = {
         }
         else if (ctr.type == "datachangeAll_filter") {
             let $top = $("#luckysheet-filter-options-sheet" + Store.currentSheetIndex + " .luckysheet-filter-options").eq(ctr["optionsindex"]);
-            let st_r = $top.data("str"), 
-                ed_r = $top.data("edr"), 
-                cindex = $top.data("cindex"), 
-                st_c = $top.data("stc"), 
+            let st_r = $top.data("str"),
+                ed_r = $top.data("edr"),
+                cindex = $top.data("cindex"),
+                st_c = $top.data("stc"),
                 ed_c = $top.data("edc");
 
             labelFilterOptionState($top, json.hasKey(ctr.rowhidden), ctr.rowhidden, ctr.caljs, true, st_r, ed_r, cindex, st_c, ed_c);
@@ -614,7 +614,7 @@ const controlHistory = {
 
             server.saveParam("cg", Store.currentSheetIndex, Store.config["rowhidden"], { "k": "rowhidden" });
 
-            //行高、列宽 刷新  
+            //行高、列宽 刷新
             jfrefreshgrid_rhcw(Store.flowdata.length, Store.flowdata[0].length);
 
             $("#luckysheet-filter-menu, #luckysheet-filter-submenu").hide();
@@ -649,14 +649,14 @@ const controlHistory = {
             else {
                 sheetmanage.changeSheetExec(Store.luckysheetfile[ctr.order - 1].index);
             }
-            
+
             $("#luckysheet-input-box").removeAttr("style");
             $("#luckysheet-sheet-list, #luckysheet-rightclick-sheet-menu").hide();
         }
         else if (ctr.type == "sheetName") {
             Store.luckysheetfile[getSheetIndex(ctr.sheetIndex)].name = ctr.txt;
             $("#luckysheet-sheets-item" + ctr.sheetIndex).find(".luckysheet-sheets-item-name").html(ctr.txt);
-            
+
             server.saveParam("all", ctr.sheetIndex, ctr.txt, { "k": "name" });
         }
         else if (ctr.type == "sheetColor") {
@@ -664,11 +664,11 @@ const controlHistory = {
 
             let luckysheetcurrentSheetitem = $("#luckysheet-sheets-item" + ctr.sheetIndex);
             luckysheetcurrentSheetitem.find(".luckysheet-sheets-item-color").remove();
-            
+
             if(ctr.color != null){
                 luckysheetcurrentSheetitem.append('<div class="luckysheet-sheets-item-color" style=" position: absolute; width: 100%; height: 3px; bottom: 0px; left: 0px; background-color: ' + ctr.color + ';"></div>');
             }
-            
+
             server.saveParam("all", ctr.sheetIndex, ctr.color, { "k": "color" });
         }
         else if (ctr.type == "mergeChange") {
@@ -696,7 +696,7 @@ const controlHistory = {
                 //条件规则
                 let sheetIndex = currentRules[i]["sheetIndex"];
                 Store.luckysheetfile[getSheetIndex(sheetIndex)]["luckysheet_conditionformat_save"] = currentRules[i]["luckysheet_conditionformat_save"];
-                
+
                 if(server.allowUpdate){
                     server.saveParam("all", sheetIndex, currentRules[i]["luckysheet_conditionformat_save"], { "k": "luckysheet_conditionformat_save" });
                 }
@@ -727,14 +727,14 @@ const controlHistory = {
             }, 1);
         }
         else if (ctr.type == "postil"){
-            luckysheetPostil.ref(ctr.curdata, ctr.rc);
+            luckysheetPostil.ref(ctr.curData, ctr.rc);
 
             for(let i = 0; i < ctr.rc.length; i++){
                 let r = ctr.rc[i].split("_")[0];
                 let c = ctr.rc[i].split("_")[1];
 
-                if(ctr.curdata[r][c] != null && ctr.curdata[r][c].ps != null){
-                    luckysheetPostil.buildPs(r, c, ctr.curdata[r][c].ps);
+                if(ctr.curData[r][c] != null && ctr.curData[r][c].ps != null){
+                    luckysheetPostil.buildPs(r, c, ctr.curData[r][c].ps);
                 }
                 else{
                     luckysheetPostil.buildPs(r, c, null);

@@ -830,7 +830,7 @@ const pivotTable = {
         }
 
         redo["type"] = "pivotTable_change";
-        redo["curdata"] = $.extend(true, [], data);
+        redo["curData"] = $.extend(true, [], data);
         redo["sheetIndex"] = Store.currentSheetIndex;
         redo["pivotTablecur"] = _this.getPivotTableData();
 
