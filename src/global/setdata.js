@@ -11,13 +11,15 @@ function setcellvalue(r, c, d, v) {
         d = Store.flowdata;
     }
 
+    const cell = { ...v }
+
     if (v && v.custom && !v.custom.new && !v.custom.delete) {
         if (Object.is(v.v, v.custom.v)) {
-            v.bg = '#fff'
-            v.custom.update = false;
+            cell.bg = '#fff'
+            cell.custom.update = false;
         } else {
-            v.bg = 'yellow'
-            v.custom.update = true;
+            cell.bg = 'yellow'
+            cell.custom.update = true;
         }
     }
 
@@ -225,8 +227,8 @@ function setcellvalue(r, c, d, v) {
 
     // console.log(cell);
 
-    d[r][c] = v;
-    return v;
+    d[r][c] = cell;
+    return cell;
 }
 
 //new runze 根据亿万格式autoFormatw和精确度accuracy 转换成 w/w0/w0.00 or 0/0.0格式
