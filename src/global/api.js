@@ -194,33 +194,37 @@ export function setCellValue(row, column, value, options = {}) {
             data = luckysheetformula.updatecell(row, column, curv, false).data;//update formula value
         }
         else{
-            if(value.ct!=null){
-                curv.ct = value.ct;
+            curv = {
+                ...cell,
+                ...value
             }
-            if(value.f!=null){
-                curv.f = value.f;
-            } else {
-                formula.delFunctionGroup(row, column);
-            }
-            if(value.v!=null){
-                curv.v = value.v;
-            }
-            else {
-                curv.v = cell.v;
-            }
-            if(value.m!=null){
-                curv.m = value.m;
-            }
+            // if(value.ct!=null){
+            //     curv.ct = value.ct;
+            // }
+            // if(value.f!=null){
+            //     curv.f = value.f;
+            // } else {
+            //     formula.delFunctionGroup(row, column);
+            // }
+            // if(value.v!=null){
+            //     curv.v = value.v;
+            // }
+            // else {
+            //     curv.v = cell.v;
+            // }
+            // if(value.m!=null){
+            //     curv.m = value.m;
+            // }
             setcellvalue(row, column, data, curv);//update text value
         }
         for(let attr in value){
             let v = value[attr];
-            if(attr in formatList){
-                menuButton.updateFormatCell(data, attr, v, row, row, column, column);//change range format
-            }
-            else {
+            // if(attr in formatList){
+            //     menuButton.updateFormatCell(data, attr, v, row, row, column, column);//change range format
+            // }
+            // else {
                 cell[attr] = v;
-            }
+            // }
         }
         data[row][column] = cell;
     }
@@ -5935,7 +5939,7 @@ export function getAllChartsBase64(cb) {
                 }})
 
                 chartMap[item.index][chartInfo.chart_id] = chartInstance
-                
+
             });
 
         }
@@ -5951,13 +5955,13 @@ export function getAllChartsBase64(cb) {
                         sheet[chart_id] = chartInstance.getDataURL();
                     }
                 }
-                
+
             }
         }
         cb && cb(chartMap)
-        
+
     }, 500);
-    
+
 }
 
 /**

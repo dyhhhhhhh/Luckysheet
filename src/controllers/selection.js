@@ -698,15 +698,24 @@ const selection = {
                     const preCell = { ...Store.flowdata[curr][curc] };
                     preCell.v = data[i][j].v;
                     preCell.m = data[i][j].v;
-                    if (!preCell.custom) {
-                        preCell.custom = {};
+
+                    if (preCell && preCell.custom && !preCell.custom.new && !preCell.custom.delete) {
+                        if (Object.is(preCell.v, preCell.custom.v)) {
+                            preCell.bg = '#fff'
+                            preCell.custom.update = false;
+                        } else {
+                            preCell.bg = 'yellow';
+                            preCell.custom.update = true;
+                        }
                     }
-                    preCell.custom.isNull = data[i][j] === '';
+                    // if (!preCell.custom) {
+                    //     preCell.custom = {};
+                    // }
+                    // preCell.custom.isNull = data[i][j] === '';
                     row.push(preCell)
                 }
                 data2.push(row);
             }
-            console.log(data, data2);
             data = data2;
 
             let copyh = data.length,
@@ -1514,10 +1523,20 @@ const selection = {
                 const preCell = { ...Store.flowdata[curr][curc] };
                 preCell.v = copyData[i][j].v;
                 preCell.m = copyData[i][j].v;
-                if (!preCell.custom) {
-                    preCell.custom = {};
+
+                if (preCell && preCell.custom && !preCell.custom.new && !preCell.custom.delete) {
+                    if (Object.is(preCell.v, preCell.custom.v)) {
+                        preCell.bg = '#fff'
+                        preCell.custom.update = false;
+                    } else {
+                        preCell.bg = 'yellow'
+                        preCell.custom.update = true;
+                    }
                 }
-                preCell.custom.isNull = copyData[i][j].custom.isNull;
+                // if (!preCell.custom) {
+                //     preCell.custom = {};
+                // }
+                // preCell.custom.isNull = copyData[i][j].custom.isNull;
                 row.push(preCell)
             }
             copyData2.push(row);

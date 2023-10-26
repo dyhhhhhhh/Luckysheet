@@ -1353,7 +1353,7 @@ var make_ssf = function make_ssf(SSF) {
         var retval = "";
         for (i = 0; i !== out.length; ++i)
             if (out[i] != null) retval += out[i].v;
-   
+
         return retval;
     }
     SSF._eval = eval_fmt;
@@ -1432,7 +1432,7 @@ var make_ssf = function make_ssf(SSF) {
                 break;
         }
 
-        //new runze 增加万 亿 格式  
+        //new runze 增加万 亿 格式
         //注："w":2万2500  "w0":2万2500  "w0.0":2万2500.2  "w0.00":2万2500.23......自定义精确度
         var reg = /^(w|W)((0?)|(0\.0+))$/;
         if(!!sfmt.match(reg)){
@@ -1448,7 +1448,7 @@ var make_ssf = function make_ssf(SSF) {
                 v = Math.abs(v);
             }
             var vInt = parseInt(v);
-             
+
             var vlength = vInt.toString().length;
             if( vlength> 4){
                 if(vlength > 8){
@@ -1467,7 +1467,7 @@ var make_ssf = function make_ssf(SSF) {
                     }
                     v = w + "万" + q;
                 }
-                
+
 
                 if(v.indexOf("亿0万0") != -1){
                     v = v.replace("0万0","");
@@ -1526,7 +1526,7 @@ var make_ssf = function make_ssf(SSF) {
                             break;
                     }
                     v = v.substring(0, v.indexOf("亿") + 1) + afterYi + v.substring(v.indexOf("万"))
-                    
+
 
                     if (afterWan.substring(0, 1) !== "." && afterWan != "") {
                         switch ((parseInt(afterWan) + "").length) {
@@ -1554,7 +1554,7 @@ var make_ssf = function make_ssf(SSF) {
             }else{
                 return v;
             }
-            
+
         }
 
 
@@ -1759,225 +1759,229 @@ function fuzzydate(s) {
 export function genarate(value) {//万 单位格式增加！！！
     var ret = [];
     var m = null, ct = {}, v = value;
-    
-    if(value == null){
-        return null;
-    }
 
-    if (/^-?[0-9]{1,}[,][0-9]{3}(.[0-9]{1,2})?$/.test(value)) { // 表述金额的字符串，如：12,000.00 或者 -12,000.00
-        m = value
-        v = Number(value.split('.')[0].replace(',', ''))
-        let fa = "#,##0"
-        if (value.split('.')[1]) {
-            fa = "#,##0."
-            for (let i = 0; i < value.split('.')[1].length; i++) {
-                fa += 0
-            }
-        }
-        ct= {fa, t: "n"}
-    } else if(value.toString().substr(0, 1) === "'"){
-        m = value.toString().substr(1);
-        ct = { "fa": "@", "t": "s" };
-    }
-    else if(value.toString().toUpperCase() === "TRUE"){
-        m = "TRUE";
-        ct = { "fa": "General", "t": "b" };
-        v = true;
-    }
-    else if(value.toString().toUpperCase() === "FALSE"){
-        m = "FALSE";
-        ct = { "fa": "General", "t": "b" };
-        v = false;
-    }
-    else if(valueIsError(value)){
-        m = value.toString();
-        ct = { "fa": "General", "t": "e" };
-    }
-    else if(/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)){
-        m = value.toString();
-        ct = { "fa": "@", "t": "s" };
-    }
-    else if(isRealNum(value) && Math.abs(parseFloat(value)) > 0 && (Math.abs(parseFloat(value)) >= 1e+11 || Math.abs(parseFloat(value)) < 1e-9)){
-        if (value.length > 16) {
-            v = value;
-            ct = { 'fa': '@', 't': 's' }
-            m = SSF.format(ct.fa, v);
-        }
-        else {
-            v = numeral(value).value();
-            var str = v.toExponential();
-            if(str.indexOf(".") > -1){
-                var strlen = str.split(".")[1].split("e")[0].length;
-                if(strlen > 5){
-                    strlen = 5;
-                }
-                ct = { "fa": "#0."+ new Array(strlen + 1).join("0") +"E+00", "t": "n" }; 
-            }
-            else{
-                ct = { "fa": "#0.E+00", "t": "n" };
-            }
-            m = SSF.format(ct.fa, v);
-        }
-    }
-    else if(value.toString().indexOf("%") > -1){
-        var index = value.toString().indexOf("%");
-        var value2 = value.toString().substr(0, index);
-        var value3 = value2.replace(/,/g, "");
+    m = value;
+    ct.fa = "@";
+    ct.t = "s";
 
-        if(index == value.toString().length - 1 && isRealNum(value3)){
-            if(value2.indexOf(".") > -1){
-                if(value2.indexOf(".") == value2.lastIndexOf(".")){
-                    var value4 = value2.split(".")[0];
-                    var value5 = value2.split(".")[1];
-
-                    var len = value5.length;
-                    if(len > 9){
-                        len = 9;
-                    }
-
-                    if(value4.indexOf(",") > -1){
-                        var isThousands = true;
-                        var ThousandsArr = value4.split(",");
-
-                        for(var i = 1; i < ThousandsArr.length; i++){
-                            if(ThousandsArr[i].length < 3){
-                                isThousands = false;
-                                break;
-                            }
-                        }
-
-                        if(isThousands){
-                            ct = { "fa": "#,##0." + new Array(len + 1).join("0") + "%", "t": "n" };
-                            v = numeral(value).value();
-                            m = SSF.format(ct.fa, v);
-                        }
-                        else{
-                            m = value.toString();
-                            ct = { "fa": "@", "t": "s" };
-                        }
-                    }
-                    else{
-                        ct = { "fa": "0." + new Array(len + 1).join("0") + "%", "t": "n" };
-                        v = numeral(value).value();
-                        m = SSF.format(ct.fa, v);
-                    }
-                }
-                else{
-                    m = value.toString();
-                    ct = { "fa": "@", "t": "s" };
-                }
-            }
-            else if(value2.indexOf(",") > -1){
-                var isThousands = true;
-                var ThousandsArr = value2.split(",");
-
-                for(var i = 1; i < ThousandsArr.length; i++){
-                    if(ThousandsArr[i].length < 3){
-                        isThousands = false;
-                        break;
-                    }
-                }
-
-                if(isThousands){
-                    ct = { "fa": "#,##0%", "t": "n" };
-                    v = numeral(value).value();
-                    m = SSF.format(ct.fa, v);
-                }
-                else{
-                    m = value.toString();
-                    ct = { "fa": "@", "t": "s" };
-                }
-            }
-            else{
-                ct = { "fa": "0%", "t": "n" };
-                v = numeral(value).value();
-                m = SSF.format(ct.fa, v);
-            }
-        }
-        else{
-            m = value.toString();
-            ct = { "fa": "@", "t": "s" };
-        }
-    }
-    else if(value.toString().indexOf(".") > -1){
-        if(value.toString().indexOf(".") == value.toString().lastIndexOf(".")){
-            var value1 = value.toString().split(".")[0];
-            var value2 = value.toString().split(".")[1];
-
-            var len = value2.length;
-            if(len > 9){
-                len = 9;
-            }
-
-            if(value1.indexOf(",") > -1){
-                var isThousands = true;
-                var ThousandsArr = value1.split(",");
-
-                for(var i = 1; i < ThousandsArr.length; i++){
-                    if(!isRealNum(ThousandsArr[i]) || ThousandsArr[i].length < 3){
-                        isThousands = false;
-                        break;
-                    }
-                }
-
-                if(isThousands){
-                    ct = { "fa": "#,##0." + new Array(len + 1).join("0"), "t": "n" };
-                    v = numeral(value).value();
-                    m = SSF.format(ct.fa, v);
-                }
-                else{
-                    m = value.toString();
-                    ct = { "fa": "@", "t": "s" };
-                }
-            }
-            else{
-                if(isRealNum(value1) && isRealNum(value2)){
-                    ct = { "fa": "0." + new Array(len + 1).join("0"), "t": "n" };
-                    v = numeral(value).value();
-                    m = SSF.format(ct.fa, v);
-                }
-                else{
-                    m = value.toString();
-                    ct = { "fa": "@", "t": "s" };
-                }
-            }
-        }
-        else{
-            m = value.toString();
-            ct = { "fa": "@", "t": "s" };
-        }
-    }
-    else if(isRealNum(value)){
-        m = value.toString();
-        ct = { "fa": "General", "t": "n" };
-        v = parseFloat(value);
-    }
-    else if (isdatetime(value) && (value.toString().indexOf(".") > -1 || value.toString().indexOf(":") > -1 || value.toString().length < 16)){
-        v = datenum_local(parseDate(value.toString().replace(/-/g, "/")));
-
-        if(v.toString().indexOf(".") > -1){
-            if(value.toString().length > 18){
-                ct.fa = "yyyy-MM-dd hh:mm:ss";
-            }
-            else if(value.toString().length > 11){
-                ct.fa = "yyyy-MM-dd hh:mm";
-            }
-            else{
-                ct.fa = "yyyy-MM-dd";
-            }
-        }
-        else{
-            ct.fa = "yyyy-MM-dd";
-        }
-        
-        ct.t = "d";
-        m = SSF.format(ct.fa, v);
-    }
-    else{
-        m = value;
-        ct.fa = "General";
-        ct.t = "g";
-    }
+    // if(value == null){
+    //     return null;
+    // }
+    //
+    // if (/^-?[0-9]{1,}[,][0-9]{3}(.[0-9]{1,2})?$/.test(value)) { // 表述金额的字符串，如：12,000.00 或者 -12,000.00
+    //     m = value
+    //     v = Number(value.split('.')[0].replace(',', ''))
+    //     let fa = "#,##0"
+    //     if (value.split('.')[1]) {
+    //         fa = "#,##0."
+    //         for (let i = 0; i < value.split('.')[1].length; i++) {
+    //             fa += 0
+    //         }
+    //     }
+    //     ct= {fa, t: "n"}
+    // } else if(value.toString().substr(0, 1) === "'"){
+    //     m = value.toString().substr(1);
+    //     ct = { "fa": "@", "t": "s" };
+    // }
+    // else if(value.toString().toUpperCase() === "TRUE"){
+    //     m = "TRUE";
+    //     ct = { "fa": "General", "t": "b" };
+    //     v = true;
+    // }
+    // else if(value.toString().toUpperCase() === "FALSE"){
+    //     m = "FALSE";
+    //     ct = { "fa": "General", "t": "b" };
+    //     v = false;
+    // }
+    // else if(valueIsError(value)){
+    //     m = value.toString();
+    //     ct = { "fa": "General", "t": "e" };
+    // }
+    // else if(/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[12])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(value)){
+    //     m = value.toString();
+    //     ct = { "fa": "@", "t": "s" };
+    // }
+    // else if(isRealNum(value) && Math.abs(parseFloat(value)) > 0 && (Math.abs(parseFloat(value)) >= 1e+11 || Math.abs(parseFloat(value)) < 1e-9)){
+    //     if (value.length > 16) {
+    //         v = value;
+    //         ct = { 'fa': '@', 't': 's' }
+    //         m = SSF.format(ct.fa, v);
+    //     }
+    //     else {
+    //         v = numeral(value).value();
+    //         var str = v.toExponential();
+    //         if(str.indexOf(".") > -1){
+    //             var strlen = str.split(".")[1].split("e")[0].length;
+    //             if(strlen > 5){
+    //                 strlen = 5;
+    //             }
+    //             ct = { "fa": "#0."+ new Array(strlen + 1).join("0") +"E+00", "t": "n" };
+    //         }
+    //         else{
+    //             ct = { "fa": "#0.E+00", "t": "n" };
+    //         }
+    //         m = SSF.format(ct.fa, v);
+    //     }
+    // }
+    // else if(value.toString().indexOf("%") > -1){
+    //     var index = value.toString().indexOf("%");
+    //     var value2 = value.toString().substr(0, index);
+    //     var value3 = value2.replace(/,/g, "");
+    //
+    //     if(index == value.toString().length - 1 && isRealNum(value3)){
+    //         if(value2.indexOf(".") > -1){
+    //             if(value2.indexOf(".") == value2.lastIndexOf(".")){
+    //                 var value4 = value2.split(".")[0];
+    //                 var value5 = value2.split(".")[1];
+    //
+    //                 var len = value5.length;
+    //                 if(len > 9){
+    //                     len = 9;
+    //                 }
+    //
+    //                 if(value4.indexOf(",") > -1){
+    //                     var isThousands = true;
+    //                     var ThousandsArr = value4.split(",");
+    //
+    //                     for(var i = 1; i < ThousandsArr.length; i++){
+    //                         if(ThousandsArr[i].length < 3){
+    //                             isThousands = false;
+    //                             break;
+    //                         }
+    //                     }
+    //
+    //                     if(isThousands){
+    //                         ct = { "fa": "#,##0." + new Array(len + 1).join("0") + "%", "t": "n" };
+    //                         v = numeral(value).value();
+    //                         m = SSF.format(ct.fa, v);
+    //                     }
+    //                     else{
+    //                         m = value.toString();
+    //                         ct = { "fa": "@", "t": "s" };
+    //                     }
+    //                 }
+    //                 else{
+    //                     ct = { "fa": "0." + new Array(len + 1).join("0") + "%", "t": "n" };
+    //                     v = numeral(value).value();
+    //                     m = SSF.format(ct.fa, v);
+    //                 }
+    //             }
+    //             else{
+    //                 m = value.toString();
+    //                 ct = { "fa": "@", "t": "s" };
+    //             }
+    //         }
+    //         else if(value2.indexOf(",") > -1){
+    //             var isThousands = true;
+    //             var ThousandsArr = value2.split(",");
+    //
+    //             for(var i = 1; i < ThousandsArr.length; i++){
+    //                 if(ThousandsArr[i].length < 3){
+    //                     isThousands = false;
+    //                     break;
+    //                 }
+    //             }
+    //
+    //             if(isThousands){
+    //                 ct = { "fa": "#,##0%", "t": "n" };
+    //                 v = numeral(value).value();
+    //                 m = SSF.format(ct.fa, v);
+    //             }
+    //             else{
+    //                 m = value.toString();
+    //                 ct = { "fa": "@", "t": "s" };
+    //             }
+    //         }
+    //         else{
+    //             ct = { "fa": "0%", "t": "n" };
+    //             v = numeral(value).value();
+    //             m = SSF.format(ct.fa, v);
+    //         }
+    //     }
+    //     else{
+    //         m = value.toString();
+    //         ct = { "fa": "@", "t": "s" };
+    //     }
+    // }
+    // else if(value.toString().indexOf(".") > -1){
+    //     if(value.toString().indexOf(".") == value.toString().lastIndexOf(".")){
+    //         var value1 = value.toString().split(".")[0];
+    //         var value2 = value.toString().split(".")[1];
+    //
+    //         var len = value2.length;
+    //         if(len > 9){
+    //             len = 9;
+    //         }
+    //
+    //         if(value1.indexOf(",") > -1){
+    //             var isThousands = true;
+    //             var ThousandsArr = value1.split(",");
+    //
+    //             for(var i = 1; i < ThousandsArr.length; i++){
+    //                 if(!isRealNum(ThousandsArr[i]) || ThousandsArr[i].length < 3){
+    //                     isThousands = false;
+    //                     break;
+    //                 }
+    //             }
+    //
+    //             if(isThousands){
+    //                 ct = { "fa": "#,##0." + new Array(len + 1).join("0"), "t": "n" };
+    //                 v = numeral(value).value();
+    //                 m = SSF.format(ct.fa, v);
+    //             }
+    //             else{
+    //                 m = value.toString();
+    //                 ct = { "fa": "@", "t": "s" };
+    //             }
+    //         }
+    //         else{
+    //             if(isRealNum(value1) && isRealNum(value2)){
+    //                 ct = { "fa": "0." + new Array(len + 1).join("0"), "t": "n" };
+    //                 v = numeral(value).value();
+    //                 m = SSF.format(ct.fa, v);
+    //             }
+    //             else{
+    //                 m = value.toString();
+    //                 ct = { "fa": "@", "t": "s" };
+    //             }
+    //         }
+    //     }
+    //     else{
+    //         m = value.toString();
+    //         ct = { "fa": "@", "t": "s" };
+    //     }
+    // }
+    // else if(isRealNum(value)){
+    //     m = value.toString();
+    //     ct = { "fa": "General", "t": "n" };
+    //     v = parseFloat(value);
+    // }
+    // else if (isdatetime(value) && (value.toString().indexOf(".") > -1 || value.toString().indexOf(":") > -1 || value.toString().length < 16)){
+    //     v = datenum_local(parseDate(value.toString().replace(/-/g, "/")));
+    //
+    //     if(v.toString().indexOf(".") > -1){
+    //         if(value.toString().length > 18){
+    //             ct.fa = "yyyy-MM-dd hh:mm:ss";
+    //         }
+    //         else if(value.toString().length > 11){
+    //             ct.fa = "yyyy-MM-dd hh:mm";
+    //         }
+    //         else{
+    //             ct.fa = "yyyy-MM-dd";
+    //         }
+    //     }
+    //     else{
+    //         ct.fa = "yyyy-MM-dd";
+    //     }
+    //
+    //     ct.t = "d";
+    //     m = SSF.format(ct.fa, v);
+    // }
+    // else{
+    //     m = value;
+    //     ct.fa = "General";
+    //     ct.t = "g";
+    // }
 
     return [m, ct, v];
 }
@@ -1998,7 +2002,7 @@ export function valueShowEs(r, c, d) {
     else{
         if (!isNaN(fuzzynum(value))){
             if(typeof(value) == "string" && value.indexOf("%") > -1){
-                
+
             }
             else{
                 value = getcellvalue(r, c, d, "v");
