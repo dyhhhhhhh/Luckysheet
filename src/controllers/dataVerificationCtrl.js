@@ -1291,6 +1291,8 @@ const dataVerificationCtrl = {
             }
             else if(item.type == 'validity'){
                 failureText += '你输入的不是一个正确的' + _this.optionLabel[item.type2];
+            } else if (item.type == 'expr') {
+                failureText += item.showText;
             }
         }
 
@@ -1477,25 +1479,20 @@ const dataVerificationCtrl = {
             if(type2 == 'phone' && !/^1[3456789]\d{9}$/.test(cellValue)){
                 return false;
             }
-
-            if (type2 == 'not null') {
-                return cellValue.length
+        } else if (type == 'expr') {
+            let inValid = false;
+            for (let i = 0; i < type2.length; i++) {
+                const reg = new RegExp(type2[i].expr);
+                console.log(reg);
+                if (!reg.test(cellValue)) {
+                    item.showText = type2[i].message;
+                    inValid = true;
+                    break
+                }
             }
 
-            if (type2 === 'date') {
-
-            }
-
-            if (type2 === 'time') {
-
-            }
-
-            if (type2 === 'datetime') {
-
-            }
-
-            if (type2 === 'num') {
-
+            if (inValid) {
+                return false;
             }
         }
 
