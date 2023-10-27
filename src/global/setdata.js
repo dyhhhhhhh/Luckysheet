@@ -13,13 +13,19 @@ function setcellvalue(r, c, d, v) {
 
     const cell = { ...v }
 
+    if (v && v.custom && !v.custom.new) {
+        if (Object.is(v.v, v.custom.v)) {
+            cell.custom.update = false;
+        } else {
+            cell.custom.update = true;
+        }
+    }
+
     if (v && v.custom && !v.custom.new && !v.custom.delete) {
         if (Object.is(v.v, v.custom.v)) {
             cell.bg = '#fff'
-            cell.custom.update = false;
         } else {
             cell.bg = 'yellow'
-            cell.custom.update = true;
         }
     }
 
