@@ -1534,8 +1534,10 @@ const dataVerificationCtrl = {
                 optionHtml += `<div class="dropdown-List-item  luckysheet-mousedown-cancel multi${checked ? ' checked': ''}">${i}</div>`;
             });
         } else {
+            let cellValue = getcellvalue(rowIndex, colIndex, null);
             list.forEach(i => {
-                optionHtml += `<div class="dropdown-List-item luckysheet-mousedown-cancel">${i}</div>`;
+                let checked = cellValue === i;
+                optionHtml += `<div class="dropdown-List-item luckysheet-mousedown-cancel single${checked ? ' checked': ''}">${i}</div>`;
             });
         }
 

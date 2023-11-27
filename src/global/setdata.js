@@ -23,6 +23,7 @@ function setcellvalue(r, c, d, v) {
 
     if (v && v.custom && !v.custom.new && !v.custom.delete) {
         if (Object.is(v.v, v.custom.v)) {
+            console.log('set #fff', v.v, v.custom.v)
             cell.bg = '#fff'
         } else {
             cell.bg = 'yellow'
@@ -30,6 +31,7 @@ function setcellvalue(r, c, d, v) {
     }
 
     v.m = v.v;
+    cell.m = cell.v;
     // 若采用深拷贝，初始化时的单元格属性丢失
     // let cell = $.extend(true, {}, d[r][c]);
     // let cell = d[r][c];
