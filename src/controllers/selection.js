@@ -921,6 +921,16 @@ const selection = {
                             originCell.f = "";
                             formula.delFunctionGroup(r + curR, c + curC, Store.currentSheetIndex);
                         }
+
+                        if (originCell && originCell.custom && !originCell.custom.new && !originCell.custom.delete) {
+                            if (Object.is(originCell.v, originCell.custom.v)) {
+                                originCell.bg = '#fff'
+                                originCell.custom.update = false;
+                            } else {
+                                originCell.bg = 'yellow';
+                                originCell.custom.update = true;
+                            }
+                        }
                     } else {
                         let cell = {};
                         let mask = genarate(value);
