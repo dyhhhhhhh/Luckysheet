@@ -5,6 +5,21 @@ import server from "../controllers/server";
 import luckysheetConfigsetting from "../controllers/luckysheetConfigsetting";
 import Store from "../store/index";
 
+export const disableEdit = (rangeValue) => {
+    if (rangeValue) {
+        if (rangeValue.custom && rangeValue.custom.column) {
+            if (!rangeValue.custom.new && rangeValue.custom.column.updateReadOnly) {
+                return true;
+            }
+            if (rangeValue.custom.new && rangeValue.custom.column.insertReadOnly) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 //Set cell value
 function setcellvalue(r, c, d, v) {
     if (d == null) {
@@ -23,7 +38,6 @@ function setcellvalue(r, c, d, v) {
 
     if (v && v.custom && !v.custom.new && !v.custom.delete) {
         if (Object.is(v.v, v.custom.v)) {
-            console.log('set #fff', v.v, v.custom.v)
             cell.bg = '#fff'
         } else {
             cell.bg = 'yellow'

@@ -16,6 +16,7 @@ import { replaceHtml, getObjType, luckysheetfontformat } from "../utils/util";
 import Store from "../store";
 import locale from "../locale/locale";
 import imageCtrl from "./imageCtrl";
+import {disableEdit} from "../global/setdata";
 
 const selection = {
     clearcopy: function(e) {
@@ -696,16 +697,18 @@ const selection = {
                     const curr = Store.luckysheet_select_save[0].row[0] + i;
                     const curc = Store.luckysheet_select_save[0].column[0] + j;
                     const preCell = { ...Store.flowdata[curr][curc] };
-                    preCell.v = data[i][j].v;
-                    preCell.m = data[i][j].v;
+                    if (!disableEdit(preCell)) {
+                        preCell.v = data[i][j].v;
+                        preCell.m = data[i][j].v;
 
-                    if (preCell && preCell.custom && !preCell.custom.new && !preCell.custom.delete) {
-                        if (Object.is(preCell.v, preCell.custom.v)) {
-                            preCell.bg = '#fff'
-                            preCell.custom.update = false;
-                        } else {
-                            preCell.bg = 'yellow';
-                            preCell.custom.update = true;
+                        if (preCell && preCell.custom && !preCell.custom.new && !preCell.custom.delete) {
+                            if (Object.is(preCell.v, preCell.custom.v)) {
+                                preCell.bg = '#fff'
+                                preCell.custom.update = false;
+                            } else {
+                                preCell.bg = 'yellow';
+                                preCell.custom.update = true;
+                            }
                         }
                     }
                     // if (!preCell.custom) {
@@ -900,6 +903,9 @@ const selection = {
                 let x = [].concat(d[r + curR]);
                 for (let c = 0; c < clen; c++) {
                     let originCell = x[c + curC];
+                    if (disableEdit(originCell)) {
+                        return;
+                    }
                     let value = dataChe[r][c];
                     if (isRealNum(value)) {
                         // 如果单元格设置了纯文本格式，那么就不要转成数值类型了，防止数值过大自动转成科学计数法
@@ -1531,16 +1537,18 @@ const selection = {
                 const curr = minh + i;
                 const curc = minc + j;
                 const preCell = { ...Store.flowdata[curr][curc] };
-                preCell.v = copyData[i][j].v;
-                preCell.m = copyData[i][j].v;
+                if (!disableEdit(preCell)) {
+                    preCell.v = copyData[i][j].v;
+                    preCell.m = copyData[i][j].v;
 
-                if (preCell && preCell.custom && !preCell.custom.new && !preCell.custom.delete) {
-                    if (Object.is(preCell.v, preCell.custom.v)) {
-                        preCell.bg = '#fff'
-                        preCell.custom.update = false;
-                    } else {
-                        preCell.bg = 'yellow'
-                        preCell.custom.update = true;
+                    if (preCell && preCell.custom && !preCell.custom.new && !preCell.custom.delete) {
+                        if (Object.is(preCell.v, preCell.custom.v)) {
+                            preCell.bg = '#fff'
+                            preCell.custom.update = false;
+                        } else {
+                            preCell.bg = 'yellow'
+                            preCell.custom.update = true;
+                        }
                     }
                 }
                 // if (!preCell.custom) {

@@ -30,6 +30,7 @@ import tooltip from '../global/tooltip';
 import locale from '../locale/locale';
 import {enterKeyControll} from './inlineString';
 import Store from '../store';
+import {getRangeValue} from "../global/api";
 
 
 let luckysheet_shiftkeydown = false;
@@ -271,6 +272,17 @@ export function keyboardInitial(){
     $("#luckysheet-input-box").click(function () {
         formula.rangeHightlightselected($("#luckysheet-rich-text-editor"));
     }).add("#" + Store.container).on("keydown", function (event) {
+        const rangeValue = getRangeValue()[0][0];
+        if (rangeValue) {
+            if (rangeValue.custom && rangeValue.custom.column) {
+                if (!rangeValue.custom.new && rangeValue.custom.column.updateReadOnly) {
+                    return;
+                }
+                if (rangeValue.custom.new && rangeValue.custom.column.insertReadOnly) {
+                    return;
+                }
+            }
+        }
         console.log('enter');
         let ctrlKey = event.ctrlKey;
         let altKey = event.altKey;

@@ -70,6 +70,8 @@ import Store from "../store";
 import { createLuckyChart, hideAllNeedRangeShow } from "../expendPlugins/chart/plugin";
 import luckysheetformula from "../global/formula";
 import {createExportDialog,fetchAndDownloadXlsx} from "../expendPlugins/exportXlsx/plugin";
+import {getRangeValue} from "../global/api";
+import {disableEdit} from "../global/setdata";
 
 //, columeflowset, rowflowset
 export default function luckysheetHandler() {
@@ -1613,6 +1615,11 @@ export default function luckysheetHandler() {
 
             //禁止前台编辑(只可 框选单元格、滚动查看表格)
             if (!Store.allowEdit) {
+                return;
+            }
+
+            const rangeValue = getRangeValue()[0][0];
+            if (disableEdit(rangeValue)) {
                 return;
             }
 
